@@ -9,22 +9,19 @@ public class Timer : MonoBehaviour
 	private float _currentTime;
 	private bool _isCount;
 
-	private Coroutine _countRoutine;
-
 	[ContextMenu(nameof(Play))]
 	public void Play()
 	{
 		_isCount = true;
-		_countRoutine = StartCoroutine(Count());
 	}
 
 	[ContextMenu(nameof(Stop))]
 	public void Stop()
 	{
-		if (_countRoutine != null)
-			StopCoroutine(_countRoutine);
+		_isCount = false;
 	}
 
+	[ContextMenu(nameof(Reset))]
 	public void Reset()
 	{
 		_currentTime = 0;
@@ -33,13 +30,18 @@ public class Timer : MonoBehaviour
 
 	private void Start()
 	{
+		StartCoroutine(Count());
 		Reset();
 	}
 
 	private IEnumerator Count()
 	{
-		while (_isCount)
+		bool isWork = true;
+
+		while (isWork)
 		{
+			yield return new WaitUntil(() => _isCount);
+
 			_currentTime += 1;
 			_selfText.text = string.Format("{0:00}:{1:00}", (int)_currentTime / 60, (int)_currentTime % 60);
 
