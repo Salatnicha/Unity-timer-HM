@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
+	[SerializeField] private MouseInputHandler _mouseInputHandler;
 	[SerializeField] private float _addSecondTime = 0.5f;
 
 	private bool _isCount;
+	private Coroutine _countRoutine;
 
 	public float CurrentTime { get; private set; }
 
 	private void OnEnable()
 	{
-		StartCoroutine(Count());
-
-		MouseInputHandler.OnMouseClick += Toggle;
+		_mouseInputHandler.OnMouseClick += Toggle;
 	}
 
 	private void Start()
@@ -23,19 +23,24 @@ public class Timer : MonoBehaviour
 
 	private void OnDisable()
 	{
-		MouseInputHandler.OnMouseClick -= Toggle;
+		_mouseInputHandler.OnMouseClick -= Toggle;
 	}
 
 	[ContextMenu(nameof(Play))]
 	public void Play()
 	{
 		_isCount = true;
+
+		_countRoutine = StartCoroutine(Count());
 	}
 
 	[ContextMenu(nameof(Stop))]
 	public void Stop()
 	{
 		_isCount = false;
+
+		if (_countRoutine != null)
+			StopCoroutine(_countRoutine);
 	}
 
 	[ContextMenu(nameof(Reset))]
@@ -60,13 +65,10 @@ public class Timer : MonoBehaviour
 	private IEnumerator Count()
 	{
 		bool isWork = true;
-		var waitCanCount = new WaitUntil(() => _isCount);
 		var waitTimeAdd = new WaitForSeconds(_addSecondTime);
 
 		while (isWork)
 		{
-			yield return waitCanCount;
-
 			CurrentTime += 1;
 
 			yield return waitTimeAdd;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MouseInputHandler : MonoBehaviour
 {
-	public static System.Action OnMouseClick;
+	public System.Action OnMouseClick;
 
 	private void Update()
 	{

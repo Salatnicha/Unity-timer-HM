@@ -14,8 +14,9 @@ public class CounterView : MonoBehaviour
 		}
 	}
 
-	public void SetTime(float time)
+	private void SetTime(float time)
 	{
-		_selfText.text = string.Format("{0:00}:{1:00}", (int)time / 60, (int)time % 60);
+		string timeFormat = string.Format("{0:00}:{1:00}", (int)time / 60, (int)time % 60);
+		_selfText.text = timeFormat;
 	}
 }

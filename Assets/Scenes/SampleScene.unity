@@ -944,6 +944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _addSecondTime: 0.5
+  _mouseInputHandler: {fileID: 1563912448}
 --- !u!4 &1860463000
 Transform:
   m_ObjectHideFlags: 0
