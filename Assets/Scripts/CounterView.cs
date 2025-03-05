@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UniRx;
 
 public class CounterView : MonoBehaviour
 {
@@ -8,11 +9,13 @@ public class CounterView : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI _selfText;
 	[SerializeField] private Timer _timer;
 
-	private void Update()
+	private void OnEnable()
 	{
 		if (_timer != null)
 		{
-			SetTime(_timer.CurrentTime);
+			_timer.CurrentTime
+				.Subscribe(time => SetTime(time))
+			.AddTo(this);
 		}
 	}
 

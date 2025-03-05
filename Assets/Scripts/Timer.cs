@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UniRx;
 
 public class Timer : MonoBehaviour
 {
@@ -9,11 +10,11 @@ public class Timer : MonoBehaviour
 	private bool _isCount;
 	private Coroutine _countRoutine;
 
-	public float CurrentTime { get; private set; }
+	public ReactiveProperty<float> CurrentTime { get; private set; } = new ReactiveProperty<float>(0);
 
 	private void OnEnable()
 	{
-		_mouseInputHandler.OnMouseClick += Toggle;
+		_mouseInputHandler.MouseClicked += Toggle;
 	}
 
 	private void Start()
@@ -23,7 +24,7 @@ public class Timer : MonoBehaviour
 
 	private void OnDisable()
 	{
-		_mouseInputHandler.OnMouseClick -= Toggle;
+		_mouseInputHandler.MouseClicked -= Toggle;
 	}
 
 	[ContextMenu(nameof(Play))]
@@ -46,7 +47,7 @@ public class Timer : MonoBehaviour
 	[ContextMenu(nameof(Reset))]
 	public void Reset()
 	{
-		CurrentTime = 0;
+		CurrentTime.Value = 0;
 		_isCount = false;
 	}
 
@@ -69,7 +70,7 @@ public class Timer : MonoBehaviour
 
 		while (isWork)
 		{
-			CurrentTime += 1;
+			CurrentTime.Value += 1;
 
 			yield return waitTimeAdd;
 		}

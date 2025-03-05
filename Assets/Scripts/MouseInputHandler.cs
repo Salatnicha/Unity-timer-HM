@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class MouseInputHandler : MonoBehaviour
 {
-	public System.Action OnMouseClick;
+	public event System.Action MouseClicked;
 
 	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			OnMouseClick?.Invoke();
+			MouseClicked?.Invoke();
 		}
 	}
 }
