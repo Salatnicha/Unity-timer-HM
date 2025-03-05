@@ -1,13 +1,30 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-	[SerializeField] private TextMeshProUGUI _selfText;
 	[SerializeField] private float _addSecondTime = 0.5f;
-	private float _currentTime;
+
 	private bool _isCount;
+
+	public float CurrentTime { get; private set; }
+
+	private void OnEnable()
+	{
+		StartCoroutine(Count());
+
+		MouseInputHandler.OnMouseClick += Toggle;
+	}
+
+	private void Start()
+	{
+		Reset();
+	}
+
+	private void OnDisable()
+	{
+		MouseInputHandler.OnMouseClick -= Toggle;
+	}
 
 	[ContextMenu(nameof(Play))]
 	public void Play()
@@ -24,28 +41,35 @@ public class Timer : MonoBehaviour
 	[ContextMenu(nameof(Reset))]
 	public void Reset()
 	{
-		_currentTime = 0;
+		CurrentTime = 0;
 		_isCount = false;
 	}
 
-	private void Start()
+	public void Toggle()
 	{
-		StartCoroutine(Count());
-		Reset();
+		if (_isCount)
+		{
+			Stop();
+		}
+		else
+		{
+			Play();
+		}
 	}
 
 	private IEnumerator Count()
 	{
 		bool isWork = true;
+		var waitCanCount = new WaitUntil(() => _isCount);
+		var waitTimeAdd = new WaitForSeconds(_addSecondTime);
 
 		while (isWork)
 		{
-			yield return new WaitUntil(() => _isCount);
+			yield return waitCanCount;
 
-			_currentTime += 1;
-			_selfText.text = string.Format("{0:00}:{1:00}", (int)_currentTime / 60, (int)_currentTime % 60);
+			CurrentTime += 1;
 
-			yield return new WaitForSeconds(_addSecondTime);
+			yield return waitTimeAdd;
 		}
 	}
 }
