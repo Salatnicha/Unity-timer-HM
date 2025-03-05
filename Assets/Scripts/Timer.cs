@@ -9,8 +9,9 @@ public class Timer : MonoBehaviour
 
 	private bool _isCount;
 	private Coroutine _countRoutine;
+	private ReactiveProperty<float> _currentTime = new ReactiveProperty<float>(0);
 
-	public ReactiveProperty<float> CurrentTime { get; private set; } = new ReactiveProperty<float>(0);
+	public IReadOnlyReactiveProperty<float> CurrentTime => _currentTime;
 
 	private void OnEnable()
 	{
@@ -47,7 +48,7 @@ public class Timer : MonoBehaviour
 	[ContextMenu(nameof(Reset))]
 	public void Reset()
 	{
-		CurrentTime.Value = 0;
+		_currentTime.Value = 0;
 		_isCount = false;
 	}
 
@@ -70,7 +71,7 @@ public class Timer : MonoBehaviour
 
 		while (isWork)
 		{
-			CurrentTime.Value += 1;
+			_currentTime.Value += 1;
 
 			yield return waitTimeAdd;
 		}
