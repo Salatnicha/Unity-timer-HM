@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CounterView : MonoBehaviour
 {
+	private const int MinutesInHour = 60;
+
 	[SerializeField] private TextMeshProUGUI _selfText;
 	[SerializeField] private Timer _timer;
 
@@ -16,7 +18,7 @@ public class CounterView : MonoBehaviour
 
 	private void SetTime(float time)
 	{
-		string timeFormat = string.Format("{0:00}:{1:00}", (int)time / 60, (int)time % 60);
+		string timeFormat = string.Format("{0:00}:{1:00}", (int)time / MinutesInHour, (int)time % MinutesInHour);
 		_selfText.text = timeFormat;
 	}
 }
